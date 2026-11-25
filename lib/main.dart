@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_booking_app/core/di/injection_container.dart';
+import 'package:travel_booking_app/features/destinations/presentaion/views/destinations_view.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +19,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Travel Booking',
       theme: ThemeData(useMaterial3: true),
-      home: Scaffold(
-        body: Center(child: Text('Travel Booking App')),
-      ),
+      home: DestinationsView()
+        
+      
      
       
       
