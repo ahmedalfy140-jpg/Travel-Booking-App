@@ -4,10 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:travel_booking_app/core/network/interceptors/api_interceptors.dart';
-import 'package:travel_booking_app/features/destinations/data/repositories/destination_repositoryImpl.dart';
+import 'package:travel_booking_app/features/destinations/data/datasources/destination_local_data_source.dart';
+import 'package:travel_booking_app/features/destinations/data/repositories/destination_repository_impl.dart';
 import 'package:travel_booking_app/features/destinations/domain/repositories/destination_repositories.dart';
 import 'package:travel_booking_app/features/destinations/domain/usecase/get_attraction.dart';
 import 'package:travel_booking_app/features/destinations/presentaion/manager/cubit/cubit/destination_cubit.dart';
+import 'package:travel_booking_app/features/destinations/presentaion/manager/cubit/cubit/destinations_list_cubit.dart';
 
 import '../network/api/api_consumer.dart';
 import '../network/api/dio_consumer.dart';
@@ -81,6 +83,15 @@ Future<void> initDependencies() async {
   () => DestinationCubit(
     getAttractionsUseCase: sl<GetAttractionUseCase>(),
   ),
+  
+);
+sl.registerLazySingleton<DestinationLocalDataSource>(
+  () => DestinationLocalDataSource(),
 );
 
+sl.registerFactory<DestinationsListCubit>(
+  () => DestinationsListCubit(destinationLocalDataSource: sl<DestinationLocalDataSource>(),
+   
+  ),
+);
 }
