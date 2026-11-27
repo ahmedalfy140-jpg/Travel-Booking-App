@@ -45,7 +45,7 @@ class DestinationsViewBody extends StatelessWidget {
                 builder: (context, destinations) {
                   return ListView.separated(
                     itemCount: destinations.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, _) =>
                         const SizedBox(height: 20),
                     itemBuilder: (context, index) {
                       return DestinationCard(

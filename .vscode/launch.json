@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Travel Booking App",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--dart-define=GEOAPIFY_API_KEY=46a3e69c38e04a0b96ad73f2b769e464"
+      ]
+    }
+  ] 
+}

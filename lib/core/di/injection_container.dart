@@ -27,11 +27,11 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<Dio>(() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: NetworkConfig.baseurl,
+        baseUrl: NetworkConfig.baseUrl,
         connectTimeout: NetworkConfig.connectTimeout,
         receiveTimeout: NetworkConfig.receiveTimeout,
         sendTimeout: NetworkConfig.sendTimeout,
-        headers: NetworkConfig.defaultHeadrs,
+        headers: NetworkConfig.defaultHeaders,
         responseType: ResponseType.json,
       ),
     );

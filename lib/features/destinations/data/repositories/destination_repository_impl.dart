@@ -16,6 +16,7 @@ class Destinationrepositoryimpl implements DestinationRepositories {
       latitude: destination.latitude,
       longitude: destination.longitude,
       radiusInMeters: destination.radiusInMeters,
+      limit: limit,
     );
   }
 }
