@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder, ReadContext;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_booking_app/features/destinations/domain/entities/destination.dart';
 import 'package:travel_booking_app/features/destinations/presentaion/manager/cubit/cubit/destination_cubit.dart';
 import 'package:travel_booking_app/features/destinations/presentaion/manager/cubit/cubit/destination_state.dart';
+import 'package:travel_booking_app/features/destinations/presentaion/views/widgets/attraction_widgets/attraction_card.dart';
+import 'package:travel_booking_app/features/destinations/presentaion/views/widgets/attraction_widgets/attractions_empty_state.dart';
+import 'package:travel_booking_app/features/destinations/presentaion/views/widgets/attraction_widgets/attractions_error_state.dart';
+import 'package:travel_booking_app/features/destinations/presentaion/views/widgets/attraction_widgets/attractions_loading_state.dart';
 
 class AttractionSection extends StatelessWidget {
-  const AttractionSection({super.key, required this.destination});
+  const AttractionSection({
+    super.key,
+    required this.destination,
+  });
 
   final DestinationEntity destination;
 
@@ -13,53 +20,24 @@ class AttractionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
-        if(state is  DestinationLoading){
-          return Center(child: CircularProgressIndicator());
-        }
-        if(state is DestinationFailure){
-          return Center(child: Column(
-            children: [
-              Text(state.message),
-              TextButton(
-                onPressed: () => context
-                    .read<DestinationCubit>()
-                    .getAttractions(destination),
-                child: const Text('Try again'),
-              )
-            ],
-          ));
-        }
-        if(state is DestinationSuccess){
-          if(state.attractions.isEmpty){
-            return Text( 'No attractions found for this destination.');
-          }
-          return  Column(
-            children: state.attractions.map((attraction) {
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    backgroundColor: Color(0xFFE5EBDD),
-                    child: Icon(
-                      Icons.place,
-                      color: Color(0xFF426B50),
-                    ),
-                  ),
-                  title: Text(
-                    attraction.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  subtitle: Text(attraction.address),
-                ),
-              );
-            }).toList(),
-          );
-          
-        }
-        return const SizedBox.shrink();
-       
+        return switch (state) {
+          DestinationLoading() => const AttractionsLoadingState(),
+          DestinationFailure(:final message) => AttractionsErrorState(
+              message: message,
+              onRetry: () => context
+                  .read<DestinationCubit>()
+                  .getAttractions(destination),
+            ),
+          DestinationSuccess(:final attractions) when attractions.isEmpty =>
+            const AttractionsEmptyState(),
+          DestinationSuccess(:final attractions) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: attractions
+                  .map((attraction) => AttractionCard(attraction: attraction))
+                  .toList(growable: false),
+            ),
+          _ => const SizedBox.shrink(),
+        };
       },
     );
   }
